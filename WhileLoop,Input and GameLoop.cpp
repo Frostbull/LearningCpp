@@ -1,77 +1,105 @@
 #include "pch.h"
 #include <iostream>
 
-struct Selection
+struct GridObject
 {
-	char GetSelection()
+	int x=8,y=5;
+	void Run(char seed)
 	{
-		char choice;
-		std::cout << "\n[W] Go Up\n[S] Go Down\n[A] Go Left\n[D] Go Right\n[Q] Quit\nPlease select: ";
-		std::cin >> choice;
+					
+		if (seed == 'w' || seed == 'W')
 
-		return choice;
-	}
-};
-struct Update
-{
-	int x = 0, y = 0;
-	void Run(char choice)
-	{
-		if (choice == 'w' || choice=='W')
 		{
-			y+= 1;
-			std::cout << "*** MOVE NORTH ***\nx:" << x << " y:" << y << std::endl;
-			
+			if (y != 0)
+			{
+				y -= 1;
+			}
 		}
 	
-		else if (choice == 's' || choice=='S')
+		else if (seed == 's' || seed == 'S')
 		{
-			y -= 1;
-			std::cout << "*** MOVE SOUTH ***\nx:" << x << " y:" << y << std::endl;
-
+			if (y != 9)
+			{
+				y += 1;
+			}
 		}
 
-		else if (choice == 'a' || choice=='A')
+		else if (seed == 'a' || seed == 'A')
 		{
-			x -= 1;
-			std::cout << "*** MOVE WEST ***\nx:" << x << " y:" << y << std::endl;
-
+			if(x!=0)
+			{ 
+				x -= 1;
+			}
 		}
 
-		else if (choice == 'd' || choice=='D')
+		else if (seed == 'd' || seed == 'D')
 		{
-			x += 1;
-			std::cout << "*** MOVE EAST ***\nx:" << x << " y:" << y << std::endl;
-
-		}
-
-		else if (choice == 'q' || choice=='Q')
-		{
-			std::cout << "See you next time!";
+			if (x != 14)
+			{
+				x += 1;
+			}
 		}
 
 		else
 		{
-			std::cout << "*** INVALID ***\nx:" << x << " y:" << y << std::endl;
+			;
 		}
 	}
 };
+struct Grid
+{
+	int length=10,width=15;
+	void Render(GridObject player)
+	{
+		char gridChar = 254;
+		char playerChar = 198;
+		for (int i = 0; i < length; i++) 
+		{
+			for (int j = 0; j < width; j++)
+			{
+				if (j == player.x && i == player.y)
+				{
+					std::cout << playerChar;
+				}
+				else
+				{
+					std::cout << gridChar;
+				}
+			}
+			std::cout << std::endl;
+		}
+		std::cout << "\n[W]:Up  [S]:Down  [A]:Left  [D]:Right  [Q]:Quit";
+
+	}
+};
+struct Selection
+{
+	char GetSelect()
+	{
+		char select;
+		std::cin >> select;
+		return select;
+	}
+}; 
 
 int main()
 {
-	char c;
-	bool gameQuit = false;
-	Selection sel;
-	Update update;
+	char player_input;
+	bool quitGame = false;
 
-	while (gameQuit == false)
+	GridObject player;
+	Grid grid;
+	Selection select;
+
+	while (quitGame == false)
 	{
-		c = sel.GetSelection();
-		update.Run(c);
+		grid.Render(player);
+		player_input = select.GetSelect();
+		player.Run(player_input);
 
-		if (c=='q' ||c=='Q')
+		if (player_input == 'q' || player_input == 'Q')
 		{
-			gameQuit = true;
+			quitGame = true;
 		}
 	}
 }
